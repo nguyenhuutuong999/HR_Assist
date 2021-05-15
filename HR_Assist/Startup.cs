@@ -148,8 +148,10 @@ namespace HR_Assist
             // Add Policy for each Role
             services.AddAuthorization(options =>
             {
+                //Manage All
                 options.AddPolicy("AdminAccess", policy => policy.RequireRole(RoleConstants.SYSTEM_ADMIN));
 
+                //Basic Access
                 options.AddPolicy("UsersAccess", policy =>
                     policy.RequireAssertion(context =>
                                 context.User.IsInRole(RoleConstants.HR)
@@ -158,33 +160,33 @@ namespace HR_Assist
                                 || context.User.IsInRole(RoleConstants.LEADER)
                                 || context.User.IsInRole(RoleConstants.TEAM_MEMBER)));
 
+                // PM/leader/Hr/Director allowed to manage team information, add requests about needed workforce.  
                 options.AddPolicy("DirectorPMLeaderHRAccess", policy =>
                     policy.RequireAssertion(context =>
                                 context.User.IsInRole(RoleConstants.HR)
                                 || context.User.IsInRole(RoleConstants.DIRECTOR)
                                 || context.User.IsInRole(RoleConstants.PM)
                                 || context.User.IsInRole(RoleConstants.LEADER)));
-
+                                
+                // Hr/Director  just allowed to manage team information, add requests about needed workforce, AND MANAGE PROJECT 
                 options.AddPolicy("PMLeaderAccess", policy =>
                     policy.RequireAssertion(context =>
-                                context.User.IsInRole(RoleConstants.PM)
-                                || context.User.IsInRole(RoleConstants.LEADER)));
+                                 context.User.IsInRole(RoleConstants.HR)
+                                || context.User.IsInRole(RoleConstants.DIRECTOR)));
 
+                // PM/leader just allowed to see team, project information 
                 options.AddPolicy("TeamMemberAccess", policy =>
                     policy.RequireAssertion(context =>
                                 context.User.IsInRole(RoleConstants.TEAM_MEMBER)));
             });
 
-
             services.AddCors();
             services.AddHttpContextAccessor();
 
             ServiceLocator.SetLocatorProvider(services.BuildServiceProvider());
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
            if (env.IsDevelopment())
