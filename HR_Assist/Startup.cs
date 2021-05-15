@@ -169,7 +169,7 @@ namespace HR_Assist
                                 || context.User.IsInRole(RoleConstants.LEADER)));
                                 
                 // Hr/Director  just allowed to manage team information, add requests about needed workforce, AND MANAGE PROJECT 
-                options.AddPolicy("PMLeaderAccess", policy =>
+                options.AddPolicy("DirectorHRAccess", policy =>
                     policy.RequireAssertion(context =>
                                  context.User.IsInRole(RoleConstants.HR)
                                 || context.User.IsInRole(RoleConstants.DIRECTOR)));
