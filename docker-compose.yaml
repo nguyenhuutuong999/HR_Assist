@@ -1,0 +1,34 @@
+version: '3.4'
+
+services:
+  hr_assist:
+    image: ${DOCKER_REGISTRY-}hr_assist
+    build:
+      context: .
+      dockerfile: HR_Assist/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "1988:80"
+      - "1989:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+  hr_assist-mssql:
+    image: "mcr.microsoft.com/mssql/server:2017-latest"
+    container_name: mssqlserver
+    restart: always
+    hostname: mssql
+    environment:
+      SA_PASSWORD: RateSetter10
+      ACCEPT_EULA: Y
+      
+    volumes:
+      - mssqlvolume:/var/opt/mssql/data
+      - ./bk:/var/opt/mssql/backup
+    ports:
+      - "1433:1433"
+
+volumes:
+    mssqlvolume:

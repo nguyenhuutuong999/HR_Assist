@@ -145,6 +145,7 @@ namespace HR_Assist
               });
            
 
+            // Add Policy for each Role
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("AdminAccess", policy => policy.RequireRole(RoleConstants.SYSTEM_ADMIN));
@@ -155,13 +156,23 @@ namespace HR_Assist
                                 || context.User.IsInRole(RoleConstants.DIRECTOR)
                                 || context.User.IsInRole(RoleConstants.PM)
                                 || context.User.IsInRole(RoleConstants.LEADER)
-                                ));
+                                || context.User.IsInRole(RoleConstants.TEAM_MEMBER)));
 
+                options.AddPolicy("DirectorPMLeaderHRAccess", policy =>
+                    policy.RequireAssertion(context =>
+                                context.User.IsInRole(RoleConstants.HR)
+                                || context.User.IsInRole(RoleConstants.DIRECTOR)
+                                || context.User.IsInRole(RoleConstants.PM)
+                                || context.User.IsInRole(RoleConstants.LEADER)));
 
                 options.AddPolicy("PMLeaderAccess", policy =>
                     policy.RequireAssertion(context =>
                                 context.User.IsInRole(RoleConstants.PM)
                                 || context.User.IsInRole(RoleConstants.LEADER)));
+
+                options.AddPolicy("TeamMemberAccess", policy =>
+                    policy.RequireAssertion(context =>
+                                context.User.IsInRole(RoleConstants.TEAM_MEMBER)));
             });
 
 
@@ -176,45 +187,42 @@ namespace HR_Assist
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+           if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "HR_Assist v1");
+                    c.DocumentTitle = "HR Assist API Document";
+                    c.DocExpansion(DocExpansion.None);
+                });
             }
-
+            
             app.UseCors(x => x
                .SetIsOriginAllowed(origin => true)
                .AllowAnyMethod()
                .AllowAnyHeader()
                .AllowCredentials());
 
-            app.UseHttpsRedirection();
-
-            
-
             app.UseAuthentication();
+
             app.UseRouting();
 
             app.UseAuthorization();
             
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Portal v1");
-                c.DocumentTitle = "Portal API Document";
-                c.DocExpansion(DocExpansion.None);
-            });
+
             using var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<HR_AssistDbContext>();
 
             // Auto run migrate
             db.Database.MigrateAsync().Wait();
 
-            // Get the service
+            // Get the service  
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
 
@@ -233,7 +241,8 @@ namespace HR_Assist
             {
                 await roleManager.CreateAsync(new ApplicationRole(RoleConstants.SYSTEM_ADMIN));
             }
-            else if(await roleManager.FindByNameAsync(RoleConstants.HR) == null)
+            
+            if(await roleManager.FindByNameAsync(RoleConstants.HR) == null)
             {
                 await roleManager.CreateAsync(new ApplicationRole(RoleConstants.HR));
             }

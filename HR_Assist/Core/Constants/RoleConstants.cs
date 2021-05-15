@@ -11,5 +11,7 @@
         public const string PM = "PM";
 
         public const string LEADER = "Leader";
+
+        public const string TEAM_MEMBER = "TeamMember";
     }
 }

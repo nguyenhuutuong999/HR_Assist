@@ -18,7 +18,6 @@ namespace HR_Assist.Controllers
     [Consumes("application/json")]
     [Produces("application/json")]
     [ApiController]
-    [Authorize]
     public class ProjectController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -28,14 +27,14 @@ namespace HR_Assist.Controllers
             _mediator = mediator;
         }
 
-        [Authorize(Roles = "HR")]
+        [Authorize(Policy = "UsersAccess")]
         [HttpGet]
         public async Task<dynamic> GetAsync([FromQuery] ProjectPageListRequest request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(request, cancellationToken);
             return new HR_AssistActionResult(result);
         }
-        [Authorize(Roles = "SystemAdmin")]
+        [Authorize(Policy = "AdminAccess")]
         [HttpPost]
         public async Task<dynamic> PostAsync([FromBody] ProjectCreateRequest request, CancellationToken cancellationToken)
         {

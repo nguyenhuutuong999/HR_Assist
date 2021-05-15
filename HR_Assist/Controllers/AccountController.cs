@@ -33,8 +33,6 @@ namespace HR_Assist.Controllers
             return new HR_AssistActionResult(result);
         }
 
-       
-
 
     }
 }
