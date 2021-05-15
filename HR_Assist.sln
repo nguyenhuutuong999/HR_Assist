@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrientPortal", "OrientPortal\OrientPortal.csproj", "{49C2D8A6-C12D-466A-B7E6-7AC6D07B640C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HR_Assist", "OrientPortal\HR_Assist.csproj", "{49C2D8A6-C12D-466A-B7E6-7AC6D07B640C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
