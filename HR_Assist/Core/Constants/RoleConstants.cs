@@ -2,7 +2,6 @@
 {
     public static class RoleConstants
     {
-        public const string SYSTEM_ADMIN = "SystemAdmin";
 
         public const string HR = "HR";
 
@@ -10,7 +9,9 @@
 
         public const string PM = "PM";
 
-        public const string LEADER = "Leader";
+        public const string PO = "PO";
+
+        public const string TEAM_LEADER = "TeamLeader";
 
         public const string TEAM_MEMBER = "TeamMember";
     }

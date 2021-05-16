@@ -18,6 +18,7 @@ namespace HR_Assist.Controllers
     [Consumes("application/json")]
     [Produces("application/json")]
     [ApiController]
+    [Authorize(Policy = "AdminAccess")]
     public class ProjectController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -27,19 +28,47 @@ namespace HR_Assist.Controllers
             _mediator = mediator;
         }
 
-        [Authorize(Policy = "UsersAccess")]
         [HttpGet]
         public async Task<dynamic> GetAsync([FromQuery] ProjectPageListRequest request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(request, cancellationToken);
             return new HR_AssistActionResult(result);
         }
-        [Authorize(Policy = "AdminAccess")]
+
+        [HttpGet("{id}")]
+        public async Task<dynamic> GetAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var request = new ProjectGetByIdRequest { Id = id };
+            var result = await _mediator.Send(request, cancellationToken);
+            return new HR_AssistActionResult(result);
+        }
+
         [HttpPost]
         public async Task<dynamic> PostAsync([FromBody] ProjectCreateRequest request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(request, cancellationToken);
             return new HR_AssistActionResult(result);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<dynamic> PutAsync(Guid id, [FromBody] ProjectEditRequest request, CancellationToken cancellationToken)
+        {
+            request.Id = id;
+            var result = await _mediator.Send(request, cancellationToken);
+            return new HR_AssistActionResult(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<dynamic> DeleteAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var request = new ProjectDeleteRequest()
+            {
+                Id = id
+            };
+            var result = await _mediator.Send(request, cancellationToken);
+
+            return new HR_AssistActionResult(result);
+
         }
     }
 }

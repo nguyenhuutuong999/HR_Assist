@@ -67,7 +67,8 @@
                     StatusCode = HttpStatusCode.OK,
                     Data = new
                     {
-                        access_token = JwtHelper.GenerateJwtToken(claims, _configuration)
+                        access_token = JwtHelper.GenerateJwtToken(claims, _configuration),
+                        role = roles.ToList()
                     }
                 };
             }

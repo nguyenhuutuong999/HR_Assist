@@ -62,7 +62,7 @@ namespace HR_Assist
                 {
                     Version = "v1",
                     Title = "Microservice API",
-                    Description = "Microservice API",
+                    Description = "phungdkh@gmail.com 123456",
                     TermsOfService = null,
                     Contact = new OpenApiContact { Name = "DINH KHAC HOAI PHUNG", Email = "phungdkh@gmail.com", Url = null },
                 });
@@ -148,36 +148,30 @@ namespace HR_Assist
             // Add Policy for each Role
             services.AddAuthorization(options =>
             {
-                //Manage All
-                options.AddPolicy("AdminAccess", policy => policy.RequireRole(RoleConstants.SYSTEM_ADMIN));
 
-                //Basic Access
-                options.AddPolicy("UsersAccess", policy =>
+                // Basic Access  
+                options.AddPolicy("BasicAccess", policy =>
                     policy.RequireAssertion(context =>
-                                context.User.IsInRole(RoleConstants.HR)
-                                || context.User.IsInRole(RoleConstants.DIRECTOR)
-                                || context.User.IsInRole(RoleConstants.PM)
-                                || context.User.IsInRole(RoleConstants.LEADER)
-                                || context.User.IsInRole(RoleConstants.TEAM_MEMBER)));
-
-                // PM/leader/Hr/Director allowed to manage team information, add requests about needed workforce.  
-                options.AddPolicy("DirectorPMLeaderHRAccess", policy =>
-                    policy.RequireAssertion(context =>
-                                context.User.IsInRole(RoleConstants.HR)
-                                || context.User.IsInRole(RoleConstants.DIRECTOR)
-                                || context.User.IsInRole(RoleConstants.PM)
-                                || context.User.IsInRole(RoleConstants.LEADER)));
-                                
-                // Hr/Director  just allowed to manage team information, add requests about needed workforce, AND MANAGE PROJECT 
-                options.AddPolicy("DirectorHRAccess", policy =>
-                    policy.RequireAssertion(context =>
-                                 context.User.IsInRole(RoleConstants.HR)
+                                context.User.IsInRole(RoleConstants.PM)
+                                || context.User.IsInRole(RoleConstants.PO)
+                                || context.User.IsInRole(RoleConstants.TEAM_LEADER)
+                                || context.User.IsInRole(RoleConstants.HR)
                                 || context.User.IsInRole(RoleConstants.DIRECTOR)));
 
-                // PM/leader just allowed to see team, project information 
-                options.AddPolicy("TeamMemberAccess", policy =>
+                //Manage All
+                options.AddPolicy("AdminAccess", policy =>
+                     policy.RequireAssertion(context =>
+                                  context.User.IsInRole(RoleConstants.HR)
+                                 || context.User.IsInRole(RoleConstants.DIRECTOR)));
+
+                // Leader (PM/TeamLeader/PO) allowed to manage team information, add requests about needed workforce.  
+                options.AddPolicy("LeaderAccess", policy =>
                     policy.RequireAssertion(context =>
-                                context.User.IsInRole(RoleConstants.TEAM_MEMBER)));
+                                context.User.IsInRole(RoleConstants.PM)
+                                || context.User.IsInRole(RoleConstants.PO)
+                                || context.User.IsInRole(RoleConstants.TEAM_LEADER)));
+
+               
             });
 
             services.AddCors();
@@ -239,9 +233,9 @@ namespace HR_Assist
 
             string password = "123456";
 
-            if (await roleManager.FindByNameAsync(RoleConstants.SYSTEM_ADMIN) == null)
+            if (await roleManager.FindByNameAsync(RoleConstants.TEAM_LEADER) == null)
             {
-                await roleManager.CreateAsync(new ApplicationRole(RoleConstants.SYSTEM_ADMIN));
+                await roleManager.CreateAsync(new ApplicationRole(RoleConstants.TEAM_LEADER));
             }
             
             if(await roleManager.FindByNameAsync(RoleConstants.HR) == null)
@@ -271,7 +265,7 @@ namespace HR_Assist
                 if (result.Succeeded)
                 {
                     await userManager.AddPasswordAsync(user, password);
-                    await userManager.AddToRoleAsync(user, RoleConstants.SYSTEM_ADMIN);
+                    await userManager.AddToRoleAsync(user, RoleConstants.TEAM_LEADER);
 
                 }
                 if (result1.Succeeded)

@@ -27,6 +27,7 @@ namespace ScrumBase.Core.Services
         {
             CreateMap<Project, ProjectDTO>();
             CreateMap<ProjectCreateRequest, Project>();
+            CreateMap<ProjectEditRequest, Project>();
         }
     }
 
