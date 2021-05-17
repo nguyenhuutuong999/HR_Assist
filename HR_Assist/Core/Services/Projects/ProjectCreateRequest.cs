@@ -12,6 +12,10 @@ namespace HR_Assist.Core.Services.Projects
 
         public string Description { get; set; }
 
+        public string Technology { get; set; }
+
         public string Domain { get; set; }
+
+        public int Size { get; set; }
     }
 }

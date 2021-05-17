@@ -13,7 +13,6 @@
 
         }
 
-        [Required]
         [MaxLength(255)]
         public string Name { get; set; }
 
@@ -24,7 +23,13 @@
         public string Description { get; set; }
 
         [MaxLength(255)]
+        public string Technology { get; set; }
+
+        [MaxLength(255)]
         public string Domain { get; set; }
+        
+        [Range(0, 1000)]
+        public int Size { get; set; }
 
         public List<Team> Team { get; set; }
 

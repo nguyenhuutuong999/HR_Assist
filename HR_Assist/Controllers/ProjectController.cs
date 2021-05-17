@@ -18,7 +18,7 @@ namespace HR_Assist.Controllers
     [Consumes("application/json")]
     [Produces("application/json")]
     [ApiController]
-    [Authorize(Policy = "AdminAccess")]
+    [Authorize(Policy = "BasicAccess")]
     public class ProjectController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -43,6 +43,7 @@ namespace HR_Assist.Controllers
             return new HR_AssistActionResult(result);
         }
 
+        [Authorize(Policy = "AdminAccess")]
         [HttpPost]
         public async Task<dynamic> PostAsync([FromBody] ProjectCreateRequest request, CancellationToken cancellationToken)
         {
@@ -50,6 +51,7 @@ namespace HR_Assist.Controllers
             return new HR_AssistActionResult(result);
         }
 
+        [Authorize(Policy = "AdminAccess")]
         [HttpPut("{id}")]
         public async Task<dynamic> PutAsync(Guid id, [FromBody] ProjectEditRequest request, CancellationToken cancellationToken)
         {
@@ -58,6 +60,7 @@ namespace HR_Assist.Controllers
             return new HR_AssistActionResult(result);
         }
 
+        [Authorize(Policy = "AdminAccess")]
         [HttpDelete("{id}")]
         public async Task<dynamic> DeleteAsync(Guid id, CancellationToken cancellationToken)
         {

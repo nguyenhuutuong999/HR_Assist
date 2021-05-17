@@ -62,7 +62,8 @@ namespace HR_Assist
                 {
                     Version = "v1",
                     Title = "Microservice API",
-                    Description = "phungdkh@gmail.com 123456",
+                    Description = "TeamLear: phungdkh@gmail.com 123456" +
+                    "HR: hongminh@gmail.com 123456",
                     TermsOfService = null,
                     Contact = new OpenApiContact { Name = "DINH KHAC HOAI PHUNG", Email = "phungdkh@gmail.com", Url = null },
                 });

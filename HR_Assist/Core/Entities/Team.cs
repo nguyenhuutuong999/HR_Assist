@@ -23,7 +23,8 @@
         [MaxLength(255)]
         public string Description { get; set; }
 
-        public int TeamSize { get; set; }
+        [Range(0, 1000)]
+        public int Size { get; set; }
 
         public Guid? ProjectId { get; set; }
 

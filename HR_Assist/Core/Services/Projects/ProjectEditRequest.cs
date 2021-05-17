@@ -18,7 +18,11 @@
 
         public string Description { get; set; } = string.Empty;
 
+        public string Technology { get; set; } = string.Empty;
+
         public string Domain { get; set; } = string.Empty;
+
+        public int Size { get; set; }
 
     }
 }

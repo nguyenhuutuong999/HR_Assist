@@ -1,6 +1,7 @@
 ﻿namespace HR_Assist.Core.Entities
 {
     using System;
+    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("ApplicationUserInTeam")] 
@@ -10,7 +11,7 @@
         {
 
         }
-
+        
         public Guid ApplicationUserId { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
