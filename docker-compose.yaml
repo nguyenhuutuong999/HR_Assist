@@ -1,11 +1,11 @@
 version: '3.4'
 
 services:
-  hr_assist:
-    image: ${DOCKER_REGISTRY-}hr_assist
+  hrassist:
+    image: ${DOCKER_REGISTRY-}hrassist
     build:
       context: .
-      dockerfile: HR_Assist/Dockerfile
+      dockerfile: HR.Assist/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -15,7 +15,7 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-  hr_assist-mssql:
+  hr-assist-mssql:
     image: "mcr.microsoft.com/mssql/server:2017-latest"
     container_name: mssqlserver
     restart: always
